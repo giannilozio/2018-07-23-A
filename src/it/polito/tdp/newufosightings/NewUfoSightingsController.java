@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.newufosightings.model.Model;
+import it.polito.tdp.newufosightings.model.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -51,14 +52,50 @@ public class NewUfoSightingsController {
 
 	@FXML
 	void doCreaGrafo(ActionEvent event) {
-
+		txtResult.clear();
+		int anno;
+    	try {
+    		anno = Integer.parseInt(txtAnno.getText());
+    	}catch(NumberFormatException e) {
+    		txtResult.appendText("Scegli un numero");
+    		return;
+    	}
+    	if(anno<1910 || anno>2014) {
+    		txtResult.clear();
+    		txtResult.appendText("Scegli un numero compreso tra il 1910 e il 2014");
+    		return;
+    	}
+    	String forma= cmbBoxForma.getValue();
+    	if(forma==null) {
+    		txtResult.appendText("Scegli una forma");
+    		return;
+    	}
+		model.creaGrafo(anno,forma);
+		
+		for(State s : model.getVicini().keySet()) {
+			
+				txtResult.appendText("Stato: "+s.getName()+" "+"con #pesi: "+model.getVicini().get(s)+"\n");
+			}
 	}
 
 	@FXML
 	void doSelezionaAnno(ActionEvent event) {
-
-	}
-
+		txtResult.clear();
+		int anno;
+    	try {
+    		anno = Integer.parseInt(txtAnno.getText());
+    	}catch(NumberFormatException e) {
+    		txtResult.appendText("Scegli un numero");
+    		return;
+    	}
+    	if(anno<1910 || anno>2014) {
+    		txtResult.clear();
+    		txtResult.appendText("Scegli un numero compreso tra il 1910 e il 2014");
+    		return;
+    	}
+    	cmbBoxForma.getItems().addAll(model.addForme(anno));
+    	
+    	}
 	@FXML
 	void doSimula(ActionEvent event) {
 
